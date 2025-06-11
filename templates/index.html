@@ -6,11 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="dark">
+<body class="light-mode">
 
-  <div class="container">
+  <!-- Toggle Theme Button -->
+  <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+  <!-- Main Content Box -->
+  <div class="main-container">
     <h1>Mental Health Support Chatbot</h1>
-    <p>This project demonstrates a smart chatbot built to provide basic emotional support and wellness check-ins to users. It offers a friendly, non-judgmental platform for people to talk about how they feel.</p>
+    <p>This project demonstrates a smart chatbot built to provide basic emotional support and wellness check-ins to users.</p>
 
     <h2>🔹 What Does the Chatbot Do?</h2>
     <ul>
@@ -22,11 +26,8 @@
 
     <h2>🔹 How It Works</h2>
     <p>
-      The chatbot uses rule-based intent recognition and sentiment analysis to understand emotional state.
-      It’s powered by <strong>Python & Flask</strong> on the backend, and uses <strong>HTML, CSS & JS</strong> for the frontend.
-    </p>
-    <p>
-      In advanced versions, <strong>machine learning (NLP)</strong> models like spaCy or transformers can be integrated to enhance responses.
+      The chatbot uses rule-based intent recognition and sentiment analysis. It’s powered by <strong>Python & Flask</strong>,
+      and uses <strong>HTML, CSS & JS</strong> for the frontend. Future versions may use <strong>NLP models</strong> like spaCy or Transformers.
     </p>
 
     <div class="chatbot-preview">
@@ -35,13 +36,13 @@
     </div>
   </div>
 
-  <!-- Floating Chat Icon -->
+  <!-- Chat Icon & Cloud Bubble -->
   <div class="chat-icon-wrapper">
     <div class="chat-icon" onclick="toggleChat()">
       <img src="{{ url_for('static', filename='Chatbot.png') }}" alt="Chatbot Icon">
     </div>
-    <div class="chat-bubble cloud" id="chatBubble">
-      💬 Consult me for any mental issue
+    <div class="chat-bubble" id="chatBubble">
+      ☁️ Consult me for any mental issue
     </div>
   </div>
 
@@ -52,15 +53,15 @@
       <button onclick="toggleChat()">×</button>
     </div>
     <div class="chat-body" id="chatBox"></div>
-    <div class="typing-indicator" id="typingIndicator">Bot is typing...</div>
     <form id="chatForm" class="chat-form">
       <input type="text" id="userInput" placeholder="Type how you're feeling..." required />
       <button type="submit">➤</button>
     </form>
   </div>
 
-  <!-- JavaScript -->
+  <!-- Script -->
   <script>
+    // Auto-hide chat bubble
     window.onload = function () {
       setTimeout(() => {
         const bubble = document.getElementById("chatBubble");
@@ -78,10 +79,6 @@
       const message = input.value;
       showMessage("You", message);
 
-      // Show typing animation
-      const typing = document.getElementById("typingIndicator");
-      typing.style.display = "block";
-
       fetch("/get", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -89,10 +86,7 @@
       })
       .then(res => res.json())
       .then(data => {
-        setTimeout(() => {
-          showMessage("Bot", data.response);
-          typing.style.display = "none";
-        }, 1000); // Simulated typing delay
+        showMessage("Bot", data.response);
       });
 
       input.value = "";
@@ -105,6 +99,14 @@
       msgDiv.innerHTML = `<span>${text}</span>`;
       chatBox.appendChild(msgDiv);
       chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Toggle Dark/Light Theme
+    function toggleTheme() {
+      document.body.classList.toggle("dark-mode");
+      document.body.classList.toggle("light-mode");
+      const button = document.querySelector('.theme-toggle');
+      button.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
     }
   </script>
 </body>
