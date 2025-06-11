@@ -6,7 +6,7 @@ from difflib import SequenceMatcher
 app = Flask(__name__)
 
 # Load counselor data
-with open("counsel_chat_250-tokens_full.json") as f:
+with open("intents.json") as f:
     data = json.load(f)
 
 # Flatten conversation data
