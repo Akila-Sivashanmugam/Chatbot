@@ -1,85 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Mental Health Chatbot</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8" />
+  <title>Mental Health Chatbot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <!-- Introduction -->
-    <section class="intro">
-        <h1>Welcome to Your Mental Wellness Companion</h1>
-        <p>
-            If you're feeling overwhelmed, sad, or anxious — you're not alone.
-            Our AI-powered chatbot is here to offer support and guidance.
-        </p>
-    </section>
+  <div class="container">
+    <h1>Mental Health Support Chatbot</h1>
+    <p>This project demonstrates a smart chatbot built to provide basic emotional support and wellness check-ins to users. It offers a friendly, non-judgmental platform for people to talk about how they feel.</p>
 
-    <!-- Chat Icon + Bubble Message -->
-    <div class="chat-icon-wrapper">
-        <div class="chat-icon" onclick="toggleChat()">
-            <img src="{{ url_for('static', filename='Chatbot.png') }}" alt="Chatbot Icon">
-        </div>
-        <div class="chat-bubble" id="chatBubble">
-            💬 Consult me for any mental issue
-        </div>
+    <h2>🔹 What Does the Chatbot Do?</h2>
+    <ul>
+      <li>Recognizes user emotions like sadness, anxiety, loneliness, or happiness.</li>
+      <li>Provides empathetic, calming, and encouraging responses.</li>
+      <li>Suggests grounding techniques or mental health resources.</li>
+      <li>Helps users feel heard, especially when human support may not be immediately available.</li>
+    </ul>
+
+    <h2>🔹 How It Works</h2>
+    <p>
+      The chatbot uses rule-based intent recognition and sentiment analysis to understand emotional state.
+      It’s powered by <strong>Python & Flask</strong> on the backend, and uses <strong>HTML, CSS & JS</strong> for the frontend.
+    </p>
+    <p>
+      In advanced versions, <strong>machine learning (NLP)</strong> models like spaCy or transformers can be integrated to enhance responses.
+    </p>
+
+    <div class="chatbot-preview">
+      <strong>[ The chatbot is live — click the purple icon to chat! ]</strong><br />
+      You can interact with the chatbot using the icon floating at the bottom right.
     </div>
+  </div>
 
-    <!-- Chat Popup -->
-    <div class="chat-popup" id="chatPopup">
-        <div class="chat-header">
-            <span>Mental Health Chatbot</span>
-            <button onclick="toggleChat()">×</button>
-        </div>
-        <div class="chat-body" id="chatBox"></div>
-        <form id="chatForm" class="chat-form">
-            <input type="text" id="userInput" placeholder="Type how you're feeling..." required>
-            <button type="submit">➤</button>
-        </form>
+  <!-- Floating Chat Icon -->
+  <div class="chat-icon-wrapper">
+    <div class="chat-icon" onclick="toggleChat()">
+      <img src="{{ url_for('static', filename='Chatbot.png') }}" alt="Chatbot Icon">
     </div>
+    <div class="chat-bubble" id="chatBubble">
+      💬 Consult me for any mental issue
+    </div>
+  </div>
 
-    <!-- Script -->
-    <script>
-        window.onload = function () {
-            setTimeout(() => {
-                const bubble = document.getElementById("chatBubble");
-                if (bubble) bubble.style.opacity = 0;
-            }, 3000);
-        };
+  <!-- Chat Popup -->
+  <div class="chat-popup" id="chatPopup">
+    <div class="chat-header">
+      <span>Mental Health Chatbot</span>
+      <button onclick="toggleChat()">×</button>
+    </div>
+    <div class="chat-body" id="chatBox"></div>
+    <form id="chatForm" class="chat-form">
+      <input type="text" id="userInput" placeholder="Type how you're feeling..." required />
+      <button type="submit">➤</button>
+    </form>
+  </div>
 
-        function toggleChat() {
-            document.getElementById("chatPopup").classList.toggle("open");
-        }
+  <!-- JavaScript -->
+  <script>
+    window.onload = function () {
+      setTimeout(() => {
+        const bubble = document.getElementById("chatBubble");
+        if (bubble) bubble.style.opacity = 0;
+      }, 3000);
+    };
 
-        document.getElementById("chatForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const input = document.getElementById("userInput");
-            const message = input.value;
-            showMessage("You", message);
+    function toggleChat() {
+      document.getElementById("chatPopup").classList.toggle("open");
+    }
 
-            fetch("/get", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: "msg=" + encodeURIComponent(message)
-            })
-            .then(res => res.json())
-            .then(data => {
-                showMessage("Bot", data.response);
-            });
+    document.getElementById("chatForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const input = document.getElementById("userInput");
+      const message = input.value;
+      showMessage("You", message);
 
-            input.value = "";
-        });
+      fetch("/get", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "msg=" + encodeURIComponent(message)
+      })
+      .then(res => res.json())
+      .then(data => {
+        showMessage("Bot", data.response);
+      });
 
-        function showMessage(sender, text) {
-            const chatBox = document.getElementById("chatBox");
-            const msgDiv = document.createElement("div");
-            msgDiv.className = sender === "You" ? "user-msg" : "bot-msg";
-            msgDiv.innerHTML = `<span>${text}</span>`;
-            chatBox.appendChild(msgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-    </script>
+      input.value = "";
+    });
 
+    function showMessage(sender, text) {
+      const chatBox = document.getElementById("chatBox");
+      const msgDiv = document.createElement("div");
+      msgDiv.className = sender === "You" ? "user-msg" : "bot-msg";
+      msgDiv.innerHTML = `<span>${text}</span>`;
+      chatBox.appendChild(msgDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  </script>
 </body>
 </html>
