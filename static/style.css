@@ -26,8 +26,8 @@ body {
 /* Chat Icon */
 .chat-icon-wrapper {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 50px;
+    right: 50px;
     z-index: 1000;
 }
 .chat-icon {
