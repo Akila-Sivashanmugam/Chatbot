@@ -1,34 +1,25 @@
 from flask import Flask, render_template, request, jsonify
 import json
 import random
-from difflib import SequenceMatcher
 
 app = Flask(__name__)
 
-# Load counselor data
+# Load intents JSON data
 with open("intents.json") as f:
-    data = json.load(f)
+    intents = json.load(f)["intents"]
 
-# Flatten conversation data
-conversations = []
-for item in data["train"]:
-    for utterance in item["utterances"]:
-        question = utterance["history"][0]
-        responses = utterance["candidates"]
-        conversations.append((question, responses))
-
-# Find the most similar user query
-def get_best_response(user_input):
-    max_ratio = 0
-    best_responses = ["I'm here to listen. Could you tell me more?"]
-
-    for question, responses in conversations:
-        ratio = SequenceMatcher(None, user_input.lower(), question.lower()).ratio()
-        if ratio > max_ratio:
-            max_ratio = ratio
-            best_responses = responses
-
-    return random.choice(best_responses)
+# Find matching tag by pattern
+def get_response(user_input):
+    user_input = user_input.lower()
+    for intent in intents:
+        for pattern in intent["patterns"]:
+            if pattern.lower() in user_input:
+                return random.choice(intent["responses"])
+    # Default fallback if no match
+    for intent in intents:
+        if intent["tag"] == "no-response":
+            return random.choice(intent["responses"])
+    return "I'm here to help. Tell me more."
 
 @app.route("/")
 def home():
@@ -37,7 +28,7 @@ def home():
 @app.route("/get", methods=["POST"])
 def chat():
     user_input = request.form["msg"]
-    response = get_best_response(user_input)
+    response = get_response(user_input)
     return jsonify({"response": response})
 
 if __name__ == "__main__":
