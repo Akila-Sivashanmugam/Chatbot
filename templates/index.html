@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="dark">
 
   <div class="container">
     <h1>Mental Health Support Chatbot</h1>
@@ -40,7 +40,7 @@
     <div class="chat-icon" onclick="toggleChat()">
       <img src="{{ url_for('static', filename='Chatbot.png') }}" alt="Chatbot Icon">
     </div>
-    <div class="chat-bubble" id="chatBubble">
+    <div class="chat-bubble cloud" id="chatBubble">
       💬 Consult me for any mental issue
     </div>
   </div>
@@ -52,6 +52,7 @@
       <button onclick="toggleChat()">×</button>
     </div>
     <div class="chat-body" id="chatBox"></div>
+    <div class="typing-indicator" id="typingIndicator">Bot is typing...</div>
     <form id="chatForm" class="chat-form">
       <input type="text" id="userInput" placeholder="Type how you're feeling..." required />
       <button type="submit">➤</button>
@@ -77,6 +78,10 @@
       const message = input.value;
       showMessage("You", message);
 
+      // Show typing animation
+      const typing = document.getElementById("typingIndicator");
+      typing.style.display = "block";
+
       fetch("/get", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -84,7 +89,10 @@
       })
       .then(res => res.json())
       .then(data => {
-        showMessage("Bot", data.response);
+        setTimeout(() => {
+          showMessage("Bot", data.response);
+          typing.style.display = "none";
+        }, 1000); // Simulated typing delay
       });
 
       input.value = "";
