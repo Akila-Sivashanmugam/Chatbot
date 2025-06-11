@@ -7,16 +7,19 @@
 </head>
 <body>
 
-    <!-- Page Introduction -->
+    <!-- Introduction -->
     <section class="intro">
         <h1>Welcome to Your Mental Wellness Companion</h1>
-        <p>If you're feeling overwhelmed, sad, anxious, or just need someone to talk to — you're in the right place. Our AI-powered chatbot is here to offer support and helpful guidance. Scroll down and tap the chat icon to start a conversation.</p>
+        <p>
+            If you're feeling overwhelmed, sad, or anxious — you're not alone.
+            Our AI-powered chatbot is here to offer support and guidance.
+        </p>
     </section>
 
-    <!-- Chat Icon and Message -->
+    <!-- Chat Icon + Bubble Message -->
     <div class="chat-icon-wrapper">
         <div class="chat-icon" onclick="toggleChat()">
-            <img src="{{ url_for('static', filename='Chatbot.png') }}" alt="Chatbot Icon">
+            <img src="{{ url_for('static', filename='chatbot.png') }}" alt="Chatbot Icon">
         </div>
         <div class="chat-bubble" id="chatBubble">
             💬 Consult me for any mental issue
@@ -32,17 +35,17 @@
         <div class="chat-body" id="chatBox"></div>
         <form id="chatForm" class="chat-form">
             <input type="text" id="userInput" placeholder="Type how you're feeling..." required>
-            <button type="submit">Send</button>
+            <button type="submit">➤</button>
         </form>
     </div>
 
-    <!-- JavaScript -->
+    <!-- Script -->
     <script>
         window.onload = function () {
             setTimeout(() => {
                 const bubble = document.getElementById("chatBubble");
-                if (bubble) bubble.style.display = "none";
-            }, 5000);
+                if (bubble) bubble.style.opacity = 0;
+            }, 3000);
         };
 
         function toggleChat() {
@@ -72,7 +75,7 @@
             const chatBox = document.getElementById("chatBox");
             const msgDiv = document.createElement("div");
             msgDiv.className = sender === "You" ? "user-msg" : "bot-msg";
-            msgDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+            msgDiv.innerHTML = `<span>${text}</span>`;
             chatBox.appendChild(msgDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
