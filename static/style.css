@@ -27,13 +27,13 @@ body {
 /* Chat Icon */
 .chat-icon-wrapper {
     position: fixed;
-    bottom: 40px;
-    right: 40px;
+    bottom: 70px;
+    right: 70px;
     z-index: 9999;
 }
 .chat-icon {
-    width: 70px;
-    height: 70px;
+    width: 100px;
+    height: 100px;
     background: white;
     border-radius: 50%;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
